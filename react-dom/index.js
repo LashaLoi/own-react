@@ -1,16 +1,37 @@
-const render = ({ tag, props, children }, htmlRoot) => {
-  const el = document.createElement(tag);
+const mapEvent = {
+  onClick: "click",
+  onChange: "change"
+};
 
-  if (props) {
-    Object.keys(props).forEach(prop => {
-      el[prop] = props[prop];
-    });
+const render = (reactElement, container) => {
+  if (["string", "number"].includes(typeof reactElement)) {
+    const textNode = document.createTextNode(reactElement);
+
+    container.appendChild(textNode);
+    return;
   }
 
-  if (typeof children === "object") render(children, el);
-  else el.innerText = children;
+  const el = document.createElement(reactElement.tag);
 
-  htmlRoot.appendChild(el);
+  if (reactElement.props) {
+    Object.keys(reactElement.props)
+      .filter(prop => prop !== "children")
+      .forEach(prop => {
+        if (typeof reactElement.props[prop] === "function") {
+          el.addEventListener(mapEvent[prop], event => {
+            reactElement.props[prop](event);
+          });
+        } else {
+          el[prop] = reactElement.props[prop];
+        }
+      });
+  }
+
+  if (reactElement.props.children) {
+    reactElement.props.children.forEach(child => render(child, el));
+  }
+
+  container.appendChild(el);
 };
 
 export default {
