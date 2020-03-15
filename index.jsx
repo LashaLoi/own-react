@@ -1,18 +1,15 @@
 import React from "./react";
 import ReactDom from "./react-dom";
 
-const B = props => (
-  <div className="alex" onClick={console.log}>
-    1 {props.someProps}
-  </div>
-);
+import { App } from "./App";
 
-const A = () => (
-  <div className="FirstClass">
-    Alex
-    <input type="text" onChange={event => console.log(event.target.value)} />
-    <B someProps="Loi" />
-  </div>
-);
+export const rerender = () => {
+  const root = document.getElementById("root");
+  root.innerHTML = "";
 
-ReactDom.render(<A />, document.getElementById("root"));
+  console.log("rerender");
+
+  ReactDom.render(<App />, root);
+};
+
+ReactDom.render(<App />, document.getElementById("root"));

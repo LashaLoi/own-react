@@ -1,6 +1,6 @@
 const mapEvent = {
   onClick: "click",
-  onChange: "change"
+  onChange: "input"
 };
 
 const render = (reactElement, container) => {
@@ -12,24 +12,22 @@ const render = (reactElement, container) => {
   }
 
   const el = document.createElement(reactElement.tag);
+  const { props } = reactElement;
 
-  if (reactElement.props) {
-    Object.keys(reactElement.props)
+  if (props) {
+    Object.keys(props)
       .filter(prop => prop !== "children")
       .forEach(prop => {
-        if (typeof reactElement.props[prop] === "function") {
+        if (typeof props[prop] === "function") {
           el.addEventListener(mapEvent[prop], event => {
-            reactElement.props[prop](event);
+            props[prop](event);
           });
         } else {
-          el[prop] = reactElement.props[prop];
+          el[prop] = props[prop];
         }
       });
   }
-
-  if (reactElement.props.children) {
-    reactElement.props.children.forEach(child => render(child, el));
-  }
+  if (props.children) props.children.forEach(child => render(child, el));
 
   container.appendChild(el);
 };
