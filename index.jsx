@@ -7,8 +7,6 @@ export const rerender = () => {
   const root = document.getElementById("root");
   root.innerHTML = "";
 
-  console.log("rerender");
-
   ReactDom.render(<App />, root);
 };
 

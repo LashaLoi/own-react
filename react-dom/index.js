@@ -27,7 +27,7 @@ const render = (reactElement, container) => {
         }
       });
   }
-  if (props.children) props.children.forEach(child => render(child, el));
+  if (props?.children) props.children.forEach(child => render(child, el));
 
   container.appendChild(el);
 };
